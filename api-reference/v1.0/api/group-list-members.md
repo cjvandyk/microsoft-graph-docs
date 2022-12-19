@@ -351,3 +351,28 @@ Content-type: application/json
   "suppressions": [
   ]
 }-->
+
+### Example 6: Using pagination to get all Members when there are more than 100.
+
+#### Request
+
+The following is an example of the request.
+
+# [C#](#tab/csharp)
+
+```csharp
+
+List<DirectoryObjects> memberList = new();
+GraphServiceClient graphClient = new GraphServiceClient(authProvider);
+var members = await graphClient.Groups["{group-id}"].Members
+ 	.Request()
+	.GetAsync();
+memberList.AddRange(members);
+while (members.NextPageRequest != null)
+{
+  members = members.NextPageRequest.GetAsync().Result;
+  memberList.AddRange(members);
+}
+
+```
+
